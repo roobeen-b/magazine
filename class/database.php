@@ -91,7 +91,7 @@
               }elseif (is_bool($value)) {
                 $param = PDO::PARAM_BOOL;
               }else{
-                $param = PDO::PARAM::STR;
+                $param = PDO::PARAM_STR;
               }
               $this->stmt->bindValue(":".$columnname."s", $value, $param);
             }

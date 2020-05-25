@@ -7,6 +7,7 @@
 		public function addCategory($data, $is_die = false){
 			return $this->addData($data, $is_die);
 		}
+
 		public function getCategoryById($category_id, $is_die=false){
 			$args = array(
 				'fields' => "categoryname, email, password",
@@ -18,6 +19,7 @@
 			);
 			return $this->getData($args, $is_die);
 		}
+
 		public function updateCategoryById($data, $id, $is_die=false){
 			$args array(
 				'where' => array(
@@ -28,6 +30,7 @@
 			);
 			return $this->updateData($data, $args, $is_die);
 		}
+		
 		public function deleteCategoryById($id, $is_die=false){
 			$args = array(
 				'where' => array(

@@ -7,7 +7,7 @@
 			$this->table = 'users';
 			database::__construct();
 		}
-public function addUser($data,$is_die=false){
+		public function addUser($data,$is_die=false){
 			return $this->addData($data,$is_die);
 		}
 
@@ -24,10 +24,23 @@ public function addUser($data,$is_die=false){
 		}
 		public function getUserbyEmail($email,$is_die=false){
 			$args = array(
-				'fields' => "username, email,password",
+				
 				'where' => array(
-						'or' => array(
+						'and' => array(
 							'email' => $email,
+							'status' => 'Active'
+						)
+					)
+			);
+			return $this->getData($args,$is_die);
+		}
+
+		public function getUserbySessionToken($sessiontoken,$is_die=false){
+			$args = array(
+				'where' => array(
+						'and' => array(
+							'session_token' => $sessiontoken,
+							'status' => 'Active'
 						)
 					)
 			);
@@ -38,7 +51,7 @@ public function addUser($data,$is_die=false){
 			$args = array(
 				'where' => array(
 						'or' => array(
-							'email' => $email,
+							'email' => $email
 						)
 					)
 			);
