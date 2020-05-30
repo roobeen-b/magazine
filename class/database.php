@@ -1,119 +1,120 @@
-<?php
+<?php 
   class database{
     protected $conn;
-    protected $stat;
+    protected $stmt;
     protected $sql;
     protected $table;
 
     function __construct(){
-      try {
-        $this->conn = new PDO('mysql:host=' .DB_HOST. ';dbname='.DB_NAME, DB_USER, DB_PASS);
-        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->conn->exec('SET NAMES UTF8');
-        return true;
-      } catch (PDOException $e) {
-        error_log(Date("M d, Y h:i:s a").' : (DB Connection) : '
-        .$e->getMessage()."\r\n", 3, ERROR_PATH.'error.log');
+      try{
+        $this->conn = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME,DB_USER,DB_PASS);
+        $this->conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+        $this->conn->exec('SET NAMES utf8');
+      }catch(PDOException $e){
+        error_log(Date("M d, Y h:i:s a").' : (DB Connection) : '.$e->getMessage()."\r\n",3,ERROR_PATH.'error.log');
         return false;
       }
     }
+
     function runQuery($sql){
-      try {
-        $this->sql = $sql;
-        $this->stmt = $this->conn->prepare($this->sql);
+      try{
+        $this->stmt = $this->conn->prepare($sql);
         $this->stmt->execute();
         return true;
-      } catch (PDOException $e) {
-          error_log(Date("M d, Y h:i:s a").' : (run Query) : '
-          .$e->getMessage()."\r\n", 3, ERROR_PATH.'error.log');
-          return false;
+      }catch(PDOException $e){
+        error_log(Date("M d, Y h:i:s a").' : (run Query database) : '.$e->getMessage()."\r\n",3,ERROR_PATH.'error.log');
+        return false;
       }
     }
+
     function getDataFromQuery($sql){
-      try {
+      try{
         $this->sql = $sql;
-        $this->stmt = $this->conn->prepare($this->sql);
+        $this->stmt= $this->conn->prepare($this->sql);
         $this->stmt->execute();
         $data = $this->stmt->fetchAll(PDO::FETCH_OBJ);
         return $data;
-      } catch (PDOException $e) {
-          error_log(Date("M d, Y h:i:s a").' : (getDataFromQuery) : '
-          .$e->getMessage(), "\r\n", 3, ERROR_PATH.'error.log');
-          return false;
+      }catch(PDOException $e){
+        error_log(Date("M d, Y h:i:s a").' : (getDataFromQuery) : '.$e->getMessage()."\r\n",3,ERROR_PATH.'error.log');
+        return false;
       }
     }
-    protected function addData($data, $is_die=false){
-       //INSERT INTO TABLE SET
+
+    protected function addData($data,$is_die=false){
+      // INSERT INTO TABLE SET 
       //  columnname = :columnname,
-      //  columnname = :columnname
-       try{
+      //  columnname = :columnname,
+      
+      try{
         $this->sql = "INSERT INTO ";
 
-        //Table name starts
+        //table name start
         if (isset($this->table) && !empty($this->table)) {
-          $this->sql .= $this->table;
-          $this->sql .= "SET ";
+          $this->sql.=$this->table;
+          $this->sql.=" SET ";
         }else{
-          throw new Exception("Error inserting data into the table without tablename.");
-
+          throw new Exception("Data cannot be insert without table name");
+          
         }
-        //Table name ends
+        //table name ends
+
 
         if (isset($data) && !empty($data)) {
           if (is_array($data)) {
             $col = array();
             foreach ($data as $columnname => $value) {
-              $col[] = $columnname." = :" .$columnname;
+              $col[] = $columnname." = :".$columnname;
             }
             $this->sql.=implode(', ', $col);
           }else{
             $this->sql.=$data;
           }
         }else{
-          throw new Exception("Data cannot be inserted without data.");
-          
+          throw new Exception("Data cannot be inserted without data");
         }
+
 
         if ($is_die) {
           echo $this->sql;
           exit();
         }
-      
+
         $this->stmt=$this->conn->prepare($this->sql);
 
+        //value bind
 
-        //Value Binding
         if (isset($data) && !empty($data)) {
           if (is_array($data)) {
             foreach ($data as $columnname => $value) {
               if (is_int($value)) {
                 $param = PDO::PARAM_INT;
-              }elseif (is_bool($value)) {
+              }else if(is_bool($value)){
                 $param = PDO::PARAM_BOOL;
               }else{
                 $param = PDO::PARAM_STR;
               }
-              $this->stmt->bindValue(":".$columnname."s", $value, $param);
+
+              $this->stmt->bindValue(":".$columnname,$value, $param);
             }
           }
         }else{
-          throw new Exception("Data cannot be inserted without data.");
-          
+          throw new Exception("Data cannot be inserted without data");
         }
-        //Value Binding ends
+        //value bind ends
 
         $success = $this->stmt->execute();
         return $success;
 
-        }catch(PDOException $e){
-           error_log(Date("M d, Y h:i:s a").' : (addData) : '.$e->getMessage()."\r\n", 3, ERROR_PATH.'error_log');
-             return false;
-        }catch(Exception $e){
-            error_log(Date("M d, Y h:i:s a").' : (addData) : '.$e->getMessage()."\r\n", 3, ERROR_PATH.'error_log');
-              return false;   
-        }
-       }
-  protected function getData($args,$is_die=false){
+      }catch(PDOException $e){
+        error_log(Date("M d, Y h:i:s a").' : (addData) : '.$e->getMessage()."\r\n",3,ERROR_PATH.'error.log');
+        return false;
+      }catch(Exception $e){
+        error_log(Date("M d, Y h:i:s a").' : (addData) : '.$e->getMessage()."\r\n",3,ERROR_PATH.'error.log');
+        return false;
+      }
+    }
+
+    protected function getData($args,$is_die=false){
       // SELECT fields(*) FROM tablename 
       //  WHERE 
       //    columnname = :columnname or 
@@ -471,4 +472,3 @@
   }
 
 ?>
-
