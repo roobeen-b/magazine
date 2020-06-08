@@ -78,7 +78,49 @@
             created_date datetime default current_timestamp,
             updated_date datetime on update current_timestamp
           )
-      "
+      ",
+      'comment' => "
+            CREATE TABLE IF NOT EXISTS comments
+              (
+                id int not null AUTO_INCREMENT PRIMARY KEY,
+                name varchar(50),
+                email varchar(100),
+                website varchar(50),
+                message text,
+                commentType enum('comment', 'reply') default 'comment',
+                commentid int,
+                blogid int,
+                state enum('waiting', 'accept', 'reject') default 'waiting',
+                status enum('Active', 'Passive') default 'Active',
+                added_by int,
+                created_date datetime default current_timestamp,
+                updated_date datetime on update current_timestamp
+              )
+          ",
+        'archive' => "
+            CREATE TABLE IF NOT EXISTS archives
+        (
+                id int not null AUTO_INCREMENT PRIMARY KEY,
+                date varchar(20),
+                status enum('Active', 'Passive') default 'Active',
+                added_by int,
+                created_date datetime default current_timestamp,
+                updated_date datetime on update current_timestamp
+        )
+    ",
+      'contact' => "
+            CREATE TABLE IF NOT EXISTS contacts
+              (
+                id int not null AUTO_INCREMENT PRIMARY KEY,
+                email varchar(100),
+                subject varchar(50),
+                message text,
+                status enum('Active', 'Passive') default 'Active',
+                added_by int,
+                created_date datetime default current_timestamp,
+                updated_date datetime on update current_timestamp
+              )
+          "
   );
   foreach ($table as $key => $sql) {
     try {

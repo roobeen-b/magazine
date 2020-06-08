@@ -1,7 +1,7 @@
 <?php  
 	include $_SERVER['DOCUMENT_ROOT'].'config/init.php';
 		$bread = "Contact";
-
+		$header = "Contact Us";
 	include 'inc/header.php';
 ?>
 
@@ -25,7 +25,7 @@
 					<div class="col-md-5 col-md-offset-1">
 						<div class="section-row">
 							<h3>Send A Message</h3>
-							<form>
+							<form action="process/contact" method="post">
 								<div class="row">
 									<div class="col-md-7">
 										<div class="form-group">
@@ -43,7 +43,8 @@
 										<div class="form-group">
 											<textarea class="input" name="message" placeholder="Message"></textarea>
 										</div>
-										<button class="primary-button">Submit</button>
+										<input type="hidden" name="id" id="id" value="">	
+										<button class="primary-button" type="submit">Submit</button>
 									</div>
 								</div>
 							</form>

@@ -72,6 +72,7 @@
 							<button class="search-btn"><i class="fa fa-search"></i></button>
 							<div class="search-form">
 								<input class="search-input" type="text" name="search" placeholder="Enter Your Search ...">
+								<div class="result"></div>
 								<button class="search-close"><i class="fa fa-times"></i></button>
 							</div>
 						</div>
@@ -85,11 +86,11 @@
 					<!-- nav -->
 					<div class="section-row">
 						<ul class="nav-aside-menu">
-							<li><a href="index.html">Home</a></li>
-							<li><a href="about.html">About Us</a></li>
-							<li><a href="#">Join Us</a></li>
-							<li><a href="#">Advertisement</a></li>
-							<li><a href="contact.html">Contacts</a></li>
+							<li><a href="index">Home</a></li>
+							<li><a href="about">About Us</a></li>
+							<!-- <li><a href="#">Join Us</a></li>
+							<li><a href="#">Advertisement</a></li> -->
+							<li><a href="contact">Contacts</a></li>
 						</ul>
 					</div>
 					<!-- /nav -->
@@ -97,38 +98,53 @@
 					<!-- widget posts -->
 					<div class="section-row">
 						<h3>Recent Posts</h3>
-						<div class="post post-widget">
-							<a class="post-img" href="blog-post.html"><img src="./assets/img/widget-2.jpg" alt=""></a>
-							<div class="post-body">
-								<h3 class="post-title"><a href="blog-post.html">Pagedraw UI Builder Turns Your Website Design Mockup Into Code Automatically</a></h3>
-							</div>
-						</div>
 
-						<div class="post post-widget">
-							<a class="post-img" href="blog-post.html"><img src="./assets/img/widget-3.jpg" alt=""></a>
-							<div class="post-body">
-								<h3 class="post-title"><a href="blog-post.html">Why Node.js Is The Coolest Kid On The Backend Development Block!</a></h3>
-							</div>
-						</div>
+						<?php
+								$Blog = new blog();
+								$popularBlog = $Blog->getAllRecentBlogWithLimit(0, 3);
+								if ($popularBlog) {
+									foreach ($popularBlog as $key => $blog) {
+									if(isset($blog->image) && !empty($blog->image) && file_exists(UPLOAD_PATH.'/blog/'.$blog->image)){
+										$thumbnail = UPLOAD_URL.'/blog/'.$blog->image;
+									}else{
 
+										$thumbnail = UPLOAD_URL.'noimg.jpg';
+									} 
+
+							?>
 						<div class="post post-widget">
-							<a class="post-img" href="blog-post.html"><img src="./assets/img/widget-4.jpg" alt=""></a>
+							<a class="post-img" href="blog-post?id=<?php echo $blog->id; ?>"><img src="<?php echo ($thumbnail); ?>" alt=""></a>
 							<div class="post-body">
-								<h3 class="post-title"><a href="blog-post.html">Tell-A-Tool: Guide To Web Design And Development Tools</a></h3>
+								<h3 class="post-title"><a href="blog-post?id=<?php echo $blog->id; ?>"><?php echo $blog->title; ?></a></h3>
 							</div>
 						</div>
+						<?php
+									}
+								}
+							?>
+						
 					</div>
 					<!-- /widget posts -->
 
 					<!-- social links -->
 					<div class="section-row">
 						<h3>Follow us</h3>
+						<?php 
+							$Follow = new follow();
+							$follows = $Follow->getAllFollowIcons();
+							if ($follows) {
+								foreach ($follows as $key => $follow) {
+						?>
 						<ul class="nav-aside-social">
-							<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-							<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-							<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-							<li><a href="#"><i class="fa fa-pinterest"></i></a></li>
-						</ul>
+							<li><a target="_blank" href="<?php echo $follow->url ?>"><i class="fa fa-<?php echo strtolower($follow->iconname) ?>"></i></a></li>
+						
+
+						<?php
+								}
+							}
+						 ?>
+							</ul>
+						
 					</div>
 					<!-- /social links -->
 
@@ -160,7 +176,62 @@
 				</div>
 			</div>
 			<!-- /Page Header -->
-			<?php } ?>			
+			<?php 
+				}else if (pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME) == 'blog-post') {
+			?>
+					<?php if(isset($blog_info->image) && !empty($blog_info->image) && file_exists(UPLOAD_PATH.'/blog/'.$blog_info->image)){
+								$thumbnail = UPLOAD_URL.'/blog/'.$blog_info->image;
+							}else{
+
+								$thumbnail = UPLOAD_URL.'noimg.jpg';
+								} 
+					?>			
+
+					<!-- Page Header -->
+			<div id="post-header" class="page-header">
+				<div class="background-img" style="background-image: url('<?php echo ($thumbnail) ?>');"></div>
+				<div class="container">
+					<div class="row">
+						<div class="col-md-10">
+							<div class="post-meta">
+								<a class="post-category <?php echo CAT_COLOR[$blog_info->categoryid%4] ?>" href="category?id=<?php echo $blog_info->categoryid; ?>"><?php echo $blog_info->category; ?></a>
+								<span class="post-date"><?php echo date("M d, Y", strtotime($blog_info->created_date)) ?></span>
+							</div>
+							<h1><?php echo $blog_info->title; ?></h1>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<?php	
+			}
+
+			 ?>			
 
 		</header>
 		<!-- /Header -->
+
+<!-- 		<script type="text/javascript">
+$(document).ready(function(){
+    $('.search-box input[type="text"]').on("keyup input", function(){
+        /* Get input value on change */
+        var inputVal = $(this).val();
+        var resultDropdown = $(this).siblings(".result");
+        if(inputVal.length){
+            $.get("../search.php", {term: inputVal}).done(function(data){
+                // Display the returned data in browser
+                resultDropdown.html(data);
+            });
+        } else{
+            resultDropdown.empty();
+        }
+    });
+    
+    // Set search input value on click of result item
+    $(document).on("click", ".result p", function(){
+        $(this).parents(".search-box").find('input[type="text"]').val($(this).text());
+        $(this).parent(".result").empty();
+    });
+});
+</script> -->
+

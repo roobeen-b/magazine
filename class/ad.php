@@ -12,8 +12,34 @@
 		public function getAdbyId($ad_id,$is_die=false){
 			$args = array(
 				'where' => array(
-						'or' => array(
+						'and' => array(
 							'id' => $ad_id,
+						)
+					)
+			);
+			return $this->getData($args,$is_die);
+		}
+
+		public function getWideAd($is_die=false){
+			$args = array(
+				'where' => array(
+						'and' => array(
+							'status' => 'Active',
+							
+							'adType' => 'widead',
+						)
+					)
+			);
+			return $this->getData($args,$is_die);
+		}
+
+		public function getSimpleAd($is_die=false){
+			$args = array(
+				'where' => array(
+						'and' => array(
+							'status' => 'Active',
+							
+							'adType' => 'simplead',
 						)
 					)
 			);
@@ -24,7 +50,7 @@
 			$args = array(
 					            
 				'where' => array(
-						'or' => array(
+						'and' => array(
 							'status'=>'Active',
 						)
 					)
@@ -35,7 +61,7 @@
 		public function updateAdById($data,$id,$is_die=false){
 			$args = array(
 				'where' => array(
-						'or' => array(
+						'and' => array(
 							'id' => $id,
 						)
 					)
@@ -46,7 +72,7 @@
 		public function deleteAdById($id,$is_die=false){
 			$args = array(
 				'where' => array(
-						'or' => array(
+						'and' => array(
 							'id' => $id,
 						)
 					)

@@ -14,9 +14,11 @@
 				if ($act == $_GET['act']) {
 					$Blog = new blog();
 					$blog_info = $Blog->getBlogbyId($blog_id);
+          //debugger($blog_info, true);
 					if ($blog_info) {
+            $action = "Edit";
 						$blog_info = $blog_info[0];
-						$action = "Edit";
+						
 					}
 				}
 			}
@@ -86,7 +88,7 @@
                   					if ($categories) {
                   						foreach ($categories as $key => $category) {
                   							?>
-                  							<option value="<?php echo ($category->id) ?>"><?php echo $category->categoryname; ?></option>
+                  							<option value="<?php echo ($category->id) ?>" <?php if(isset($blog_info->id) && !empty($blog_info->id)){echo ($blog_info->categoryid == $category->id)?"selected":"";}; ?>><?php echo $category->categoryname; ?></option>
                   							<?php
                   						}
                   					}
@@ -130,6 +132,8 @@
 
   	var content = $('#content').val();
   	ckeditor(content);
+
+    
 
 
     function ckeditor(data=""){

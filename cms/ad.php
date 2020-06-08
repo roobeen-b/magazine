@@ -57,7 +57,7 @@ $header = "Ad";
                             $thumbnail = UPLOAD_URL.'noimg.jpg';
                           }
                       ?>
-                      <td><img class="img-responsive" src="<?php echo($thumbnail) ?>"alt="" style="width: 300px; height: auto"></td>
+                      <td><a href="<?php echo $ad->url;?>"><img class="img-responsive" src="<?php echo($thumbnail) ?>"alt="" style="width: 200px; height: auto"></a></td>
                       
                       <td>
                         <a href="javascript:;" class="btn btn-info" onclick="editAd(this); " data-ad_info='<?php echo(json_encode($ad))?>'>

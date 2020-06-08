@@ -7,7 +7,7 @@
 					<div class="col-md-5">
 						<div class="footer-widget">
 							<div class="footer-logo">
-								<a href="index.html" class="logo"><img src="./assets/img/logo.png" alt=""></a>
+								<a href="index" class="logo"><img src="./assets/img/logo.png" alt=""></a>
 							</div>
 							<ul class="footer-nav">
 								<li><a href="#">Privacy Policy</a></li>
@@ -27,21 +27,29 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								<div class="footer-widget">
 									<h3 class="footer-title">About Us</h3>
 									<ul class="footer-links">
-										<li><a href="about.html">About Us</a></li>
-										<li><a href="#">Join Us</a></li>
-										<li><a href="contact.html">Contacts</a></li>
+										<li><a href="about">About Us</a></li>
+										<!-- <li><a href="#">Join Us</a></li> -->
+										<li><a href="contact">Contacts</a></li>
 									</ul>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="footer-widget">
-									<h3 class="footer-title">Catagories</h3>
+									<h3 class="footer-title">Categories</h3>
+									<?php 
+									$Category = new category();
+									$categories = $Category->getAllCategory();
+										if ($categories) {
+											foreach ($categories as $key => $category) {
+									?>
 									<ul class="footer-links">
-										<li><a href="category.html">Web Design</a></li>
-										<li><a href="category.html">JavaScript</a></li>
-										<li><a href="category.html">Css</a></li>
-										<li><a href="category.html">Jquery</a></li>
+										<li><a href="category?id=<?php echo $category->id; ?>"><?php echo $category->categoryname ?></a></li>
+										
 									</ul>
+									<?php
+											}
+										}
+									?>
 								</div>
 							</div>
 						</div>
@@ -57,11 +65,21 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								</form>
 							</div>
 							<ul class="footer-social">
-								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-								<li><a href="#"><i class="fa fa-pinterest"></i></a></li>
-							</ul>
+								<?php 
+									$Follow = new follow();
+									$follows = $Follow->getAllFollowIcons();
+									if ($follows) {
+										foreach ($follows as $key => $follow) {
+						?>
+								<li><a target="_blank" href="<?php echo $follow->url ?>"><i class="fa fa-<?php echo strtolower($follow->iconname) ?>"></i></a></li>
+
+							
+
+						<?php
+								}
+							}
+						 ?>
+						 </ul>
 						</div>
 					</div>
 
