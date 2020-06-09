@@ -36,3 +36,4 @@ Jun 02, 2020 02:01:53 pm : (addData) : SQLSTATE[42000]: Syntax error or access v
 Jun 02, 2020 02:02:10 pm : (addData) : SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'order by id DESC' at line 1
 Jun 02, 2020 02:02:23 pm : (addData) : SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'order by id DESC' at line 1
 Jun 04, 2020 05:41:07 pm : (run Query database) : SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'admin@magazine.com' for key 'email'
+Jun 09, 2020 12:57:27 pm : (run Query database) : SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'admin@magazine.com' for key 'email'

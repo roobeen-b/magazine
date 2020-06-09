@@ -31,6 +31,9 @@
       <li><a href="contact"><i class="fa fa-contao"></i> Contact us </a>
       </li>
 
+      <li><a href="newsletter"><i class="fa fa-newspaper-o"></i> Subscribers </a>
+      </li>
+
     </ul>
   </div>
   <div class="menu_section">

@@ -1,34 +1,86 @@
-<?php
-	include $_SERVER['DOCUMENT_ROOT'].'config/init.php';
-	include 'inc/header.php';
+<?php  
+    include $_SERVER['DOCUMENT_ROOT'].'config/init.php';
+        $header = "Search results";
+    include 'inc/header.php';
+
+    //debugger($_GET);
+    if (isset($_GET['search']) && !empty($_GET['search'])) {
+        $search_text = $_GET['search'];
+       // debugger($search_text);
+        
+    }else{
+        redirect('index');
+    }
+
 ?>
+        <!-- section -->
+        <div class="section">
+            <!-- container -->
+            <div class="container">
+                <!-- row -->
+                <div class="row">
+                    
+                    <!-- aside -->
+                    <div class="col-md-8">
+                        <!-- ad -->
+                       <!--  <div class="aside-widget text-center">
+                            <a href="#" style="display: inline-block;margin: auto;">
+                                <img class="img-responsive" src="./assets/img/postad-2.jpg" alt="">
+                            </a>
+                        </div> -->
+                        <!-- /ad -->
+
+                        <!-- post widget -->
+                        <div class="aside-widget">
+                            <div class="section-title">
+                                <h2><?php echo "Search results"; ?></h2>
+                            </div>
+
+                            
+                                <?php 
+                                    $Blog = new blog();
+                                   // debugger($search_text);
+                                    $blogs = $Blog->getBlogbyText($search_text);
+                                    //debugger($blogs);
+                                    if (isset($blogs) && !empty($blogs)) {
+                                        foreach ($blogs as $key => $blog) {
+                                    
+                                    if(isset($blog->image) && !empty($blog->image) && file_exists(UPLOAD_PATH.'/blog/'.$blog->image)){
+                                        $thumbnail = UPLOAD_URL.'/blog/'.$blog->image;
+                                    }else{
+
+                                        $thumbnail = UPLOAD_URL.'noimg.jpg';
+                                    } 
+                                    
+                                ?>  
+                                <div class="post post-widget">      
+                                    <a class="post-img" href="blog-post?id=<?php echo $blog->id ?>"><img src="<?php echo $thumbnail ?>" alt=""></a>
+                                    <div class="post-body">
+                                        <h3 class="post-title"><a href="blog-post?id=<?php echo $blog->id ?>"><?php echo $blog->title ?></a></h3>
+                                    </div>
+                                </div>
+
+                                <?php
+                                        }
+                                    }else{
+                                ?>
+                                    <h3>Search results not found.</h3>
+                                <?php
+                                    }
+                                 ?>
 
 
-<?php
-// Attempt search query execution
-try{
-    if(isset($_REQUEST["term"])){
-        // create prepared statement
-        $sql = "SELECT * FROM blogs WHERE title LIKE :term";
-        $stmt = $pdo->prepare($sql);
-        $term = $_REQUEST["term"] . '%';
-        // bind parameters to statement
-        $stmt->bindParam(":term", $term);
-        // execute the prepared statement
-        $stmt->execute();
-        if($stmt->rowCount() > 0){
-            while($row = $stmt->fetch()){
-                echo "<p>" . $row["title"] . "</p>";
-            }
-        } else{
-            echo "<p>No matches found</p>";
-        }
-    }  
-} catch(PDOException $e){
-    die("ERROR: Could not able to execute $sql. " . $e->getMessage());
-}
- 
-// Close statement
-unset($stmt);
- 
-?>
+                            
+                        </div>
+                        <!-- /post widget -->
+                    </div>
+                    <!-- /aside -->
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /section -->
+
+        <?php include 'inc/footer.php'; ?>
+

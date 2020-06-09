@@ -65,6 +65,22 @@
 			return $this->getData($args,$is_die);
 		}
 
+		public function getBlogbyText($text,$is_die=false){
+			$args = array(
+				'fields' => ['id',
+					            'title',
+					            'content',
+					            'featured',
+					            'categoryid',
+					            '(SELECT categoryname from categories where id = categoryid) as category',
+					            'view',
+					            'image',
+					        	'created_date'],
+				'where' => " where title LIKE '%" .$text. "%' "
+			);
+			return $this->getData($args,$is_die);
+		}
+
 		public function getAllBlog($is_die=false){
 			$args = array(
 				'fields' => ['id',

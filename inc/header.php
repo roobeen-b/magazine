@@ -70,11 +70,10 @@
 						<div class="nav-btns">
 							<button class="aside-btn"><i class="fa fa-bars"></i></button>
 							<button class="search-btn"><i class="fa fa-search"></i></button>
-							<div class="search-form">
+							<form class="search-form" action="../search" method="get">
 								<input class="search-input" type="text" name="search" placeholder="Enter Your Search ...">
-								<div class="result"></div>
 								<button class="search-close"><i class="fa fa-times"></i></button>
-							</div>
+							</form>
 						</div>
 						<!-- /search & aside toggle -->
 					</div>
